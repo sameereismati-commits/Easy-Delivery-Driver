@@ -7,6 +7,9 @@ final class DriverSessionViewModel: ObservableObject {
     @Published var state: DriverState = .offline
     @Published var driverCoordinate: CLLocationCoordinate2D = SampleData.driverHome.coordinate
 
+    @Published var todayEarnings: Double = 0
+    @Published var totalMilesDelivered: Double = 0
+
     private var tripTask: Task<Void, Never>?
     private var nextOrderIndex = 0
 
@@ -39,7 +42,8 @@ final class DriverSessionViewModel: ObservableObject {
         }
     }
 
-    func confirmDelivered() {
+    func confirmDelivered(_ order: DriverOrder) {
+        todayEarnings += order.payout
         state = .searchingForOrder
         requestNewOrder()
     }
@@ -76,8 +80,17 @@ final class DriverSessionViewModel: ObservableObject {
                     longitude: start.longitude + (end.longitude - start.longitude) * t
                 )
             }
-            guard !Task.isCancelled else { return }
+            guard let self, !Task.isCancelled else { return }
+            self.recordCompletedLeg(from: start, to: end)
             onArrival()
         }
+    }
+
+    private func recordCompletedLeg(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) {
+        let startLocation = CLLocation(latitude: start.latitude, longitude: start.longitude)
+        let endLocation = CLLocation(latitude: end.latitude, longitude: end.longitude)
+        let miles = startLocation.distance(from: endLocation) / 1609.34
+
+        totalMilesDelivered += miles
     }
 }

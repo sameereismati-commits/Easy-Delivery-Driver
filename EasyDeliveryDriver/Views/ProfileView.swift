@@ -18,6 +18,11 @@ struct ProfileView: View {
                     .padding(.vertical, 4)
                 }
 
+                Section("Today") {
+                    StatRow(title: "Earnings", value: session.todayEarnings.formatted(.currency(code: "USD")))
+                    StatRow(title: "Miles Delivered", value: String(format: "%.1f mi", session.totalMilesDelivered))
+                }
+
                 Section {
                     Button("Log Out", role: .destructive) {
                         session.goOffline()
@@ -26,6 +31,20 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
+        }
+    }
+}
+
+private struct StatRow: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
+                .foregroundStyle(.secondary)
         }
     }
 }

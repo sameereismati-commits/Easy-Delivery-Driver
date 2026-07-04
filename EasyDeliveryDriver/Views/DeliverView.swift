@@ -65,7 +65,7 @@ struct DeliverView: View {
                         destinationCoordinate: order.dropoff.coordinate,
                         driverCoordinate: order.dropoff.coordinate,
                         actionTitle: "Delivered",
-                        action: { session.confirmDelivered() }
+                        action: { session.confirmDelivered(order) }
                     )
                 }
             }
