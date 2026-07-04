@@ -24,6 +24,14 @@ struct ProfileView: View {
                 }
 
                 Section {
+                    NavigationLink {
+                        PaymentMethodView(session: session)
+                    } label: {
+                        Label("Payment", systemImage: "dollarsign.circle")
+                    }
+                }
+
+                Section {
                     Button("Log Out", role: .destructive) {
                         session.goOffline()
                         auth.logout()

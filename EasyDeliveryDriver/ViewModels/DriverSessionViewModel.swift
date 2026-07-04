@@ -48,6 +48,10 @@ final class DriverSessionViewModel: ObservableObject {
         requestNewOrder()
     }
 
+    func cashOut() {
+        todayEarnings = 0
+    }
+
     private func requestNewOrder() {
         Task { [weak self] in
             try? await Task.sleep(nanoseconds: 2_000_000_000)
