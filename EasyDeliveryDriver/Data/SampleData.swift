@@ -1,6 +1,8 @@
 import Foundation
 
 enum SampleData {
+    static let driverHome = StoreLocation(name: "Downtown San Jose", latitude: 37.3382, longitude: -121.8863)
+
     static let walmartStoryRoad = StoreLocation(name: "Walmart Supercenter - Story Rd", latitude: 37.3352, longitude: -121.8712)
     static let targetEastridge = StoreLocation(name: "Target - Eastridge", latitude: 37.3315, longitude: -121.8630)
     static let homeDepotSanCarlos = StoreLocation(name: "Home Depot - W San Carlos St", latitude: 37.3277, longitude: -121.9127)
