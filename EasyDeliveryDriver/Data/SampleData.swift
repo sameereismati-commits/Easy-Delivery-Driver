@@ -23,15 +23,30 @@ enum SampleData {
     static let sephoraValleyFair = StoreLocation(name: "Sephora - Westfield Valley Fair", latitude: 37.3252, longitude: -121.9459, servesCategories: [.makeup])
     static let ultaBlossomHill = StoreLocation(name: "Ulta Beauty - Blossom Hill Rd", latitude: 37.2481, longitude: -121.8865, servesCategories: [.makeup])
 
-    // Drop-off only for now (random address drop-offs arrive in a later part).
-    static let homeDepotSanCarlos = StoreLocation(name: "Home Depot - W San Carlos St", latitude: 37.3277, longitude: -121.9127, servesCategories: [])
-    static let costcoColeman = StoreLocation(name: "Costco - Coleman Ave", latitude: 37.3396, longitude: -121.9209, servesCategories: [])
-
     static let allStores: [StoreLocation] = [
         walmartStoryRoad, walmartCottleRoad, targetEastridge,
-        bestBuyAlmaden, sephoraValleyFair, ultaBlossomHill,
-        homeDepotSanCarlos, costcoColeman
+        bestBuyAlmaden, sephoraValleyFair, ultaBlossomHill
     ]
+
+    // Streets used to generate random residential drop-off addresses around San Jose.
+    private static let sanJoseStreets = [
+        "Santa Clara St", "First St", "Almaden Blvd", "Story Rd", "Capitol Expy",
+        "Blossom Hill Rd", "Winchester Blvd", "Bascom Ave", "Meridian Ave",
+        "Tully Rd", "King Rd", "White Rd", "Cottle Rd", "Monterey Rd", "Alum Rock Ave"
+    ]
+
+    private static func randomSanJoseAddress() -> StoreLocation {
+        let number = Int.random(in: 100...9999)
+        let street = sanJoseStreets.randomElement() ?? "Santa Clara St"
+        let latitude = Double.random(in: 37.24...37.42)
+        let longitude = Double.random(in: -121.95...(-121.75))
+        return StoreLocation(
+            name: "\(number) \(street), San Jose",
+            latitude: latitude,
+            longitude: longitude,
+            servesCategories: []
+        )
+    }
 
     // Real products from Easy Delivery's catalog (DummyJSON), grouped by category.
     private static let catalog: [CatalogProduct] = [
@@ -129,16 +144,17 @@ enum SampleData {
         return items
     }
 
-    private static func makeOrder(category: ItemCategory, dropoff: StoreLocation, payout: Double) -> DriverOrder {
+    private static func makeOrder(category: ItemCategory, payout: Double) -> DriverOrder {
         let pickup = pickupStores(for: category).randomElement() ?? walmartStoryRoad
+        let dropoff = randomSanJoseAddress()
         return DriverOrder(pickup: pickup, dropoff: dropoff, payout: payout, items: randomItems(for: category))
     }
 
     static let orders: [DriverOrder] = [
-        makeOrder(category: .groceries, dropoff: targetEastridge, payout: 8.50),
-        makeOrder(category: .clothing, dropoff: costcoColeman, payout: 9.75),
-        makeOrder(category: .electronics, dropoff: bestBuyAlmaden, payout: 13.00),
-        makeOrder(category: .makeup, dropoff: walmartCottleRoad, payout: 11.25),
-        makeOrder(category: .general, dropoff: homeDepotSanCarlos, payout: 10.50)
+        makeOrder(category: .groceries, payout: 8.50),
+        makeOrder(category: .clothing, payout: 9.75),
+        makeOrder(category: .electronics, payout: 13.00),
+        makeOrder(category: .makeup, payout: 11.25),
+        makeOrder(category: .general, payout: 10.50)
     ]
 }
