@@ -5,4 +5,5 @@ struct DriverOrder: Identifiable {
     let pickup: StoreLocation
     let dropoff: StoreLocation
     let payout: Double
+    let items: [OrderItem]
 }
